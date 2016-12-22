@@ -1,40 +1,48 @@
 package net.germer.shakespeare;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class Lifeform {
-
-	private final long SEED;
+	
 	private final String TARGET;
-	private final String VALID_GENES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
+	public static final String VALID_GENES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ,.!?-äüöß";
 
-	private Gene[] genePool;
-	private Random pseudoRandom;
+	private List<Gene> genePool;
 	private double fitness;
-	private double normalizedFitness;
 
-	public Lifeform(String target, long seed) {
-		this.SEED = seed;
+	public Lifeform(String target) {
 		this.TARGET = target;
 		fitness = 0.0;
 		setup();
 	}
+	
+	public Lifeform(String target, String genes) {
+		this.TARGET = target;
+		breed(genes);
+	}
 
 	private void setup() {
-		pseudoRandom = new Random(SEED);
-		genePool = new Gene[TARGET.length()];
-		for (int i = 0; i < genePool.length; i++) {
-			genePool[i] = new Gene(
-					RandomStringUtils.random(1, 0, 0, false, false, VALID_GENES.toCharArray(), pseudoRandom).charAt(0));
+		genePool = new ArrayList<Gene>();
+		for (int i = 0; i < TARGET.length(); i++) {
+			genePool.add(new Gene(
+					RandomStringUtils.random(1, 0, 0, false, false, VALID_GENES.toCharArray(), Population.getPseudoRandom()).charAt(0)));
+		}
+	}
+	
+	private void breed(String genes) {
+		genePool = new ArrayList<Gene>();
+		for (int i = 0; i < genes.length(); i++) {
+			genePool.add(new Gene(genes.charAt(i)));
 		}
 	}
 
 	public double calculateFitness() {
 		int score = 0;
-		for (int i = 0; i < genePool.length; i++) {
-			if (genePool[i].getC() == TARGET.charAt(i)) {
+		for (int i = 0; i < genePool.size(); i++) {
+			if (genePool.get(i).getC() == TARGET.charAt(i)) {
 				score++;
 			}
 		}
@@ -44,14 +52,6 @@ public class Lifeform {
 
 	public double getFitness() {
 		return fitness;
-	}
-
-	public double getNormalizedFitness() {
-		return normalizedFitness;
-	}
-
-	public void setNormalizedFitness(double normalizedFitness) {
-		this.normalizedFitness = normalizedFitness;
 	}
 
 	public String toString() {
