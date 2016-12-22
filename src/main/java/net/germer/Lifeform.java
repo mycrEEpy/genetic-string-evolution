@@ -8,7 +8,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 public class Lifeform {
 	
 	private final String TARGET;
-	public static final String VALID_GENES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ,.!?-äüöß";
+	public static final String VALID_GENES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ,.!?-äüöß1234567890";
 
 	private List<Gene> genePool;
 	private double fitness;
@@ -46,7 +46,8 @@ public class Lifeform {
 				score++;
 			}
 		}
-		this.fitness = (double) score / (double) TARGET.length();
+		score = score * score;
+		this.fitness = (double) score / (double) (TARGET.length() * TARGET.length());
 		return this.fitness;
 	}
 
