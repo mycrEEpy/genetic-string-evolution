@@ -1,4 +1,4 @@
-package net.germer.shakespeare;
+package net.germer;
 
 import java.util.ArrayList;
 import java.util.List;

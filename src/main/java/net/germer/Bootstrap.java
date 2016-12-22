@@ -1,4 +1,4 @@
-package net.germer.shakespeare;
+package net.germer;
 
 public class Bootstrap {
 
